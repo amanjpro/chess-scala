@@ -1,9 +1,24 @@
-name := "chess"
+organization := "me.amanj"
+name := "zahak"
 
 version := "1.0"
 
-scalaVersion := "2.11.8"
+scalaVersion := "2.13.1"
 
-libraryDependencies += "org.scalactic" %% "scalactic" % "2.2.6"
-libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.6" % "test"
-libraryDependencies += "com.typesafe" % "config" % "1.3.0"
+scalacOptions ++= Seq(
+  "-encoding", "utf8", // Option and arguments on same line
+  "-Xfatal-warnings",  // New lines for each options
+  "-deprecation",
+  "-unchecked",
+  "-language:implicitConversions",
+  "-language:higherKinds",
+  "-language:existentials",
+  "-language:postfixOps"
+)
+
+libraryDependencies ++= Seq(
+  "org.scala-lang.modules" %% "scala-parallel-collections" % "1.0.0",
+  "org.scalactic" %% "scalactic" % "3.2.0",
+  "org.scalatest" %% "scalatest-wordspec" % "3.2.0" % "test",
+  "com.typesafe" % "config" % "1.4.1"
+)

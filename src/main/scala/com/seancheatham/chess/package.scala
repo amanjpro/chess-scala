@@ -1,6 +1,6 @@
-package com.seancheatham
+package me.amanj
 
-package object chess {
+package object zahak {
 
   //
   // Piece-type Constants

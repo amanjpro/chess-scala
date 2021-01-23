@@ -1,8 +1,8 @@
-import com.seancheatham.chess.Board
-import com.seancheatham.chess._
-import org.scalatest.WordSpec
+package me.amanj.zahak
 
-class BoardSpec extends WordSpec {
+import org.scalatest.wordspec.AnyWordSpec
+
+class BoardSpec extends AnyWordSpec {
 
   "A default chess board" can {
     "be generated" in {

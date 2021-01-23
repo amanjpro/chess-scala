@@ -1,4 +1,4 @@
-package com.seancheatham.chess
+package me.amanj.zahak
 
 import com.typesafe.config.ConfigFactory
 

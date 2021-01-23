@@ -1,4 +1,9 @@
-package com.seancheatham.chess
+package me.amanj.zahak
+
+import scala.collection.parallel.CollectionConverters._
+import scala.math.Ordering.Double.IeeeOrdering
+
+
 
 object Search {
 
@@ -11,11 +16,11 @@ object Search {
     */
   def apply(depth: Int = Config.SEARCH_DEPTH)(board: Board): (Byte, Byte) =
     board.availableMoves.par
-      .maxBy(m =>
+      .maxBy { case (from, to) =>
         alphaBetaMax(Double.MinValue, Double.MaxValue, depth)(
-          board.move(m._1, m._2)
+          board.move(from, to)
         )
-      )
+      }
 
   /**
     * Computes the "max" side of alpha/beta search, by attempting to maximize the value returned
@@ -333,6 +338,7 @@ object Search {
         // To assist with the "pruning" in alpha/beta pruning, sort the result
         // by the "weight" of the piece at the destination index.  Pieces
         // with higher weights will be searched first.
+        .toVector
         .sortBy(move => -board.pieces(move._2).weight)
   }
 
