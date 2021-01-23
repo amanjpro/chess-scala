@@ -144,6 +144,37 @@ case class Board(pieces: Vector[Byte],
   def evaluate =
     Evaluate(this)
 
+  def display: String = {
+    val sep = s"|${"-" * 15}|"
+    var index = 2
+    var builder = new StringBuilder()
+    LEGAL_SQUARES.filter(sq => pieces(sq) != _I).zipWithIndex.foreach { case (square, index) =>
+      if(index != 0 && index % 8 == 0) {
+        builder.append("|")
+        builder.append("\n")
+        builder.append(sep)
+        builder.append("\n")
+      }
+      builder.append("|")
+      pieces(square) match {
+        case BP => builder.append("\u265F")
+        case BN => builder.append("\u265E")
+        case BB => builder.append("\u265D")
+        case BR => builder.append("\u265C")
+        case BQ => builder.append("\u265B")
+        case BK => builder.append("\u265A")
+        case WP => builder.append("\u2659")
+        case WN => builder.append("\u2658")
+        case WB => builder.append("\u2657")
+        case WR => builder.append("\u2656")
+        case WQ => builder.append("\u2655")
+        case WK => builder.append("\u2654")
+        case _E  => builder.append(" ")
+      }
+    }
+    builder.append("|").toString
+  }
+
 }
 
 object Board {

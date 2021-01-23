@@ -135,6 +135,7 @@ package object zahak {
       _I, WR, WN, WB, WQ, WK, WB, WN, WR, _I, // 99
       _I, _I, _I, _I, _I, _I, _I, _I, _I, _I, // 109
       _I, _I, _I, _I, _I, _I, _I, _I, _I, _I // 119
+    //0    1   2  3    4  5   6    7   8  9
     )
 
   /**
