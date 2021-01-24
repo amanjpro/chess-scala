@@ -102,19 +102,19 @@ package object zahak {
   // Board Constants
   //
   /**
-    * A collection of squares which are legal on the board.  Since a [[com.seancheatham.chess.Board]] is
+    * A collection of squares which are legal on the board.  Since a [[me.amanj.zahak.Board]] is
     * represented as 10x12, the outer squares provide padding, but are illegal for play
     */
   final val LEGAL_SQUARES: Vector[Byte] =
     (
-      (20 until 29).toVector ++
-        (30 until 39) ++
-        (40 until 49) ++
-        (50 until 59) ++
-        (60 until 69) ++
-        (70 until 79) ++
-        (80 until 89) ++
-        (90 until 99)
+      (21 to 28).toVector ++
+        (31 to 38) ++
+        (41 to 48) ++
+        (51 to 58) ++
+        (61 to 68) ++
+        (71 to 78) ++
+        (81 to 88) ++
+        (91 to 98)
       )
       .map(_.toByte)
 

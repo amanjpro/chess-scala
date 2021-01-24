@@ -110,8 +110,8 @@ case class Board(pieces: Vector[Byte],
     * Determines if there is a winner of the match, by checking for the non-existence of a King for each side.
     *
     * @return An option indicating the "side" which won.
-    *         Some([[com.seancheatham.chess#BLACK]]) if Black won the match
-    *         Some([[com.seancheatham.chess#WHITE]]) if White won the match
+    *         Some([[me.amanj.zahak#BLACK]]) if Black won the match
+    *         Some([[me.amanj.zahak#WHITE]]) if White won the match
     *         None if the game is still in progress
     */
   def winner: Option[Byte] =
@@ -148,7 +148,7 @@ case class Board(pieces: Vector[Byte],
     val sep = s"|${"-" * 15}|"
     var index = 2
     var builder = new StringBuilder()
-    LEGAL_SQUARES.filter(sq => pieces(sq) != _I).zipWithIndex.foreach { case (square, index) =>
+    LEGAL_SQUARES.zipWithIndex.foreach { case (square, index) =>
       if(index != 0 && index % 8 == 0) {
         builder.append("|")
         builder.append("\n")
