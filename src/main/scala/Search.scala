@@ -1,11 +1,15 @@
 package me.amanj.zahak
 
 import scala.collection.parallel.CollectionConverters._
+import scala.collection.concurrent.TrieMap
 import scala.math.Ordering.Double.IeeeOrdering
 
 
 
 object Search {
+
+  val cacheMax = TrieMap.empty[Int, Double]
+  val cacheMin = TrieMap.empty[Int, Double]
 
   /**
     * Performs alpha/beta search (with pruning) on the given board
@@ -18,7 +22,7 @@ object Search {
     board.availableMoves.par
       .maxBy { case (from, to) =>
         alphaBetaMax(Double.MinValue, Double.MaxValue, depth)(
-          board.move(from, to)
+          board.move(from, to),
         )
       }
 
@@ -35,24 +39,30 @@ object Search {
     if (remainingDepth <= 0)
       board.evaluate
     else {
-      var v = Double.MinValue
-      var a = alpha
-      val _availableMoves = board.availableMoves.iterator
-      var continue = true
-      while (continue && _availableMoves.hasNext) {
-        val (from, to) =
-          _availableMoves.next()
-        v = Math.max(
-          v,
-          alphaBetaMin(a, beta, remainingDepth - 1)(board
-            .move(from, to)
+      val _moves = board.availableMoves
+      val _movesHash = _moves.hashCode
+      val _availableMoves = _moves.iterator
+      if(cacheMax.contains(_movesHash)) cacheMax(_movesHash)
+      else {
+        var v = Double.MinValue
+        var a = alpha
+        var continue = true
+        while (continue && _availableMoves.hasNext) {
+          val (from, to) =
+            _availableMoves.next()
+          v = Math.max(
+            v,
+            alphaBetaMin(a, beta, remainingDepth - 1)(board
+              .move(from, to)
+            )
           )
-        )
-        a = Math.max(a, v)
-        if (beta <= a)
-          continue = false
+          a = Math.max(a, v)
+          cacheMax.addOne(_movesHash -> a)
+          if (beta <= a)
+            continue = false
+        }
+        v
       }
-      v
     }
 
   /**
@@ -68,19 +78,25 @@ object Search {
     if (remainingDepth <= 0)
       -board.evaluate
     else {
-      var v = Double.MaxValue
-      var b = beta
-      val _availableMoves = board.availableMoves.iterator
-      var continue = true
-      while (continue && _availableMoves.hasNext) {
-        val (from, to) =
-          _availableMoves.next()
-        v = Math.min(v, alphaBetaMax(alpha, b, remainingDepth - 1)(board.move(from, to)))
-        b = Math.min(b, v)
-        if (b <= alpha)
-          continue = false
+      val _moves = board.availableMoves
+      val _movesHash = _moves.hashCode
+      val _availableMoves = _moves.iterator
+      if(cacheMin.contains(_movesHash)) cacheMin(_movesHash)
+      else {
+        var v = Double.MaxValue
+        var b = beta
+        var continue = true
+        while (continue && _availableMoves.hasNext) {
+          val (from, to) =
+            _availableMoves.next()
+          v = Math.min(v, alphaBetaMax(alpha, b, remainingDepth - 1)(board.move(from, to)))
+          b = Math.min(b, v)
+          cacheMin.addOne(_movesHash -> b)
+          if (b <= alpha)
+            continue = false
+        }
+        v
       }
-      v
     }
 
   /**
