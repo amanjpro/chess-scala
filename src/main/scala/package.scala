@@ -161,7 +161,7 @@ package object zahak {
   //
   // Implicit Helpers
   //
-  implicit class PieceTypeImplicits(pieceType: Byte) {
+  implicit class PieceTypeImplicits(val pieceType: Byte) extends AnyVal {
 
     def isWhite: Boolean =
       Range(WP.toInt, WK.toInt) contains pieceType.toInt
