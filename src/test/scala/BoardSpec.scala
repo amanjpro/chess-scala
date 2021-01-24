@@ -30,8 +30,9 @@ class BoardSpec extends AnyWordSpec {
     "perform alpha/beta search" in {
       val board =
         Board.challenge
-
-      println(Search()(board))
+      val (from, to) = Search()(board)
+      assert(from == 53)
+      assert(to == 41)
     }
   }
 
