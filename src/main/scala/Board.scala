@@ -41,15 +41,19 @@ case class Board(pieces: Vector[Byte],
     Search.availableMoves(this)
 
   /**
-    * Executes the move from the given index to the given index.  The value at the "from" index is set to Empty.
-    * Any piece at the "to" index will be captured/removed from the board.
+    * Executes the move from the given index to the given index.  The value at
+    * the "from" index is set to Empty.  Any piece at the "to" index will be
+    * captured/removed from the board.
     *
-    * @param from The index of the position from which the piece is moving
-    * @param to   The target index to move to
-    * @return A new instance of the updated Board, with all of the proper flags set
+    * @param from     The index of the position from which the piece is moving
+    * @param to       The target index to move to
+    * @param isEval   In evaluation mode, moveCount is not incremented, making
+    *                 it easier to keep track of "seen" positions
+    * @return A new instance of the updated Board, with all of the proper flags
+    *         set
     */
   def move(from: Byte,
-           to: Byte): Board = {
+           to: Byte, isEval: Boolean): Board = {
 
     val isBKCastle: Boolean =
       blackKingCastleAvailable &&
@@ -102,7 +106,7 @@ case class Board(pieces: Vector[Byte],
       (whiteKingCastleAvailable || isWKCastle) && from != 98 && from != 95,
       (whiteQueenCastleAvailable || isWQCastle) && from != 91 && from != 95,
       newEnPassant,
-      (moveCount + 1).toByte
+      if(isEval) moveCount else (moveCount + 1).toByte
     )
   }
 

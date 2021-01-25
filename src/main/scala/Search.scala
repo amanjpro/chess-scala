@@ -22,7 +22,7 @@ object Search {
     board.availableMoves.par
       .maxBy { case (from, to) =>
         alphaBetaMax(Double.MinValue, Double.MaxValue, depth)(
-          board.move(from, to),
+          board.move(from, to, true),
         )
       }
 
@@ -39,10 +39,9 @@ object Search {
     if (remainingDepth <= 0)
       board.evaluate
     else {
-      val _moves = board.availableMoves
-      val _movesHash = _moves.hashCode
-      val _availableMoves = _moves.iterator
-      if(cacheMax.contains(_movesHash)) cacheMax(_movesHash)
+      val boardHash = board.hashCode
+      val _availableMoves = board.availableMoves.iterator
+      if(cacheMax.contains(boardHash)) cacheMax(boardHash)
       else {
         var v = Double.MinValue
         var a = alpha
@@ -53,11 +52,11 @@ object Search {
           v = Math.max(
             v,
             alphaBetaMin(a, beta, remainingDepth - 1)(board
-              .move(from, to)
+              .move(from, to, true)
             )
           )
           a = Math.max(a, v)
-          cacheMax.addOne(_movesHash -> a)
+          cacheMax.addOne(boardHash -> a)
           if (beta <= a)
             continue = false
         }
@@ -78,10 +77,9 @@ object Search {
     if (remainingDepth <= 0)
       -board.evaluate
     else {
-      val _moves = board.availableMoves
-      val _movesHash = _moves.hashCode
-      val _availableMoves = _moves.iterator
-      if(cacheMin.contains(_movesHash)) cacheMin(_movesHash)
+      val boardHash = board.hashCode
+      val _availableMoves = board.availableMoves.iterator
+      if(cacheMin.contains(boardHash)) cacheMin(boardHash)
       else {
         var v = Double.MaxValue
         var b = beta
@@ -89,9 +87,9 @@ object Search {
         while (continue && _availableMoves.hasNext) {
           val (from, to) =
             _availableMoves.next()
-          v = Math.min(v, alphaBetaMax(alpha, b, remainingDepth - 1)(board.move(from, to)))
+          v = Math.min(v, alphaBetaMax(alpha, b, remainingDepth - 1)(board.move(from, to, true)))
           b = Math.min(b, v)
-          cacheMin.addOne(_movesHash -> b)
+          cacheMin.addOne(boardHash -> b)
           if (b <= alpha)
             continue = false
         }

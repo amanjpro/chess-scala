@@ -16,6 +16,11 @@ scalacOptions ++= Seq(
   "-language:postfixOps"
 )
 
+fork in Test := true
+fork in run := true
+
+javaOptions += "-Xmx2G"
+
 libraryDependencies ++= Seq(
   "org.scala-lang.modules" %% "scala-parallel-collections" % "1.0.0",
   "org.scalactic" %% "scalactic" % "3.2.0",
