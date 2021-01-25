@@ -92,14 +92,41 @@ case class Board(pieces: Vector[Byte],
             from == 95 &&
             to == 93
           )
+    val isPawn = pieces(from) match {
+      case `WP` | `BP` => true
+      case _           => false
+    }
 
-    val newEnPassant: Option[Byte] =
-      None // TODO: Implement
+    val enPassantDirection = if(whiteToMove) -10 else 10
+    val newEnPassant: Option[Byte] = {
+      if(isPawn && Math.abs(from - to) == 20) {
+        Some((from + enPassantDirection).toByte)
+      } else None
+    }
+
+    // enPassant capture
+    val isEnPassant =
+      isPawn &&
+      enPassant.filter(_ == to).isDefined &&
+      pieces(to).isEmpty &&
+      enPassant.filter { ep =>
+        val piece = pieces(ep - enPassantDirection)
+        whiteToMove != piece.isWhite && (piece == WP && !whiteToMove || piece == BP && whiteToMove)
+      }.isDefined
+
+    val newPieces =
+      if(!isEnPassant)
+        pieces
+          .updated(to.toInt, pieces(from.toInt))
+          .updated(from.toInt, 1.toByte)
+      else
+        pieces
+          .updated(to.toInt, pieces(from.toInt))
+          .updated(from.toInt, 1.toByte)
+          .updated(enPassant.get - enPassantDirection, 1.toByte)
 
     Board(
-      pieces
-        .updated(to.toInt, pieces(from.toInt))
-        .updated(from.toInt, 1.toByte),
+      newPieces,
       !whiteToMove,
       (blackKingCastleAvailable || isBKCastle) && from != 28 && from != 25,
       (blackQueenCastleAvailable || isBQCastle) && from != 21 && from != 25,

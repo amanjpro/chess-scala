@@ -228,6 +228,29 @@ object Search {
           Some((index, index + 11 * direction))
         else
           None
+      val downLeftEnPassant = {
+        val neighbour = board.pieces(index + direction)
+        if (board.enPassant.filter(_ == index + 9 * direction).isDefined &&
+          ((board.whiteToMove &&  neighbour.isBlack) ||
+            neighbour.isWhite) &&
+          (neighbour == BP || neighbour == WP)
+        )
+          Some((index, index + 11 * direction))
+        else
+          None
+      }
+      val downRightEnPassant = {
+        val neighbour = board.pieces(index - direction)
+        if (board.enPassant.filter(_ == index + 11 * direction).isDefined &&
+          ((board.whiteToMove &&  neighbour.isBlack) ||
+            neighbour.isWhite) &&
+          (neighbour == BP || neighbour == WP)
+        )
+          Some((index, index + 9 * direction))
+        else
+          None
+      }
+
       val downOne =
         if (
           if (board.whiteToMove) board.pieces(index + 10 * direction).isBlack
@@ -244,7 +267,7 @@ object Search {
           Some((index, index + 20 * direction))
         else
           None
-      Vector(downLeft, downRight, downOne, downTwo).flatten
+      Vector(downLeft, downRight, downLeftEnPassant, downRightEnPassant, downOne, downTwo).flatten
     }
 
     def bishop =
