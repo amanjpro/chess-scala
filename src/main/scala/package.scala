@@ -178,11 +178,11 @@ package object zahak {
     def weight: Double =
       pieceType match {
         case `_E` | `_I` => 0
-        case `BP` | `WP` => 1
-        case `BB` | `WB` => 3
-        case `BN` | `WN` => 3
-        case `BR` | `WR` => 5
-        case `BQ` | `WQ` => 9
+        case `BP` | `WP` => 100
+        case `BB` | `WB` => 300
+        case `BN` | `WN` => 300
+        case `BR` | `WR` => 500
+        case `BQ` | `WQ` => 900
         case `BK` | `WK` => Double.MaxValue
       }
   }
