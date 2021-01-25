@@ -18,13 +18,15 @@ object Search {
     * @param board The board to search
     * @return The best move to be made from the available moves
     */
-  def apply(depth: Int = Config.SEARCH_DEPTH)(board: Board): (Byte, Byte) =
+  def apply(depth: Int = Config.SEARCH_DEPTH)(board: Board): (Byte, Byte) = {
+    val alphabeta = if(board.whiteToMove) alphaBetaMax _  else alphaBetaMin _
     board.availableMoves.par
       .maxBy { case (from, to) =>
         alphaBetaMax(Double.MinValue, Double.MaxValue, depth)(
           board.move(from, to, true),
         )
       }
+  }
 
   /**
     * Computes the "max" side of alpha/beta search, by attempting to maximize the value returned
@@ -252,10 +254,7 @@ object Search {
       }
 
       val downOne =
-        if (
-          if (board.whiteToMove) board.pieces(index + 10 * direction).isBlack
-          else board.pieces(index + 10 * direction).isWhite
-        )
+        if (board.pieces(index + 10 * direction).isEmpty)
           Some((index, index + 10 * direction))
         else
           None

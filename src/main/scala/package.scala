@@ -183,7 +183,7 @@ package object zahak {
         case `BN` | `WN` => 300
         case `BR` | `WR` => 500
         case `BQ` | `WQ` => 900
-        case `BK` | `WK` => Double.MaxValue
+        case `BK` | `WK` => Int.MaxValue
       }
   }
 
