@@ -17,7 +17,6 @@ scalacOptions ++= Seq(
 )
 
 fork in Test := true
-fork in run := true
 
 javaOptions += "-Xmx2G"
 
